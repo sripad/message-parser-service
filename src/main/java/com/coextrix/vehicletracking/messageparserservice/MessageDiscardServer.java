@@ -1,7 +1,6 @@
 package com.coextrix.vehicletracking.messageparserservice;
 
 import io.netty.bootstrap.ServerBootstrap;
-
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelOption;
@@ -9,6 +8,8 @@ import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
+
+import com.coextrix.vehicletracking.messageparserservice.config.MessageParserServiceConfig;
 
 /**
  * Discards any incoming data.
@@ -55,7 +56,9 @@ public class MessageDiscardServer {
         if (args.length > 0) {
             port = Integer.parseInt(args[0]);
         } else {
-            port = 8083;
+        	MessageParserServiceConfig config = new MessageParserServiceConfig();
+        	int configPort = config.getConfigInt("message.parser.service.port");
+            port = configPort > 0 ? configPort : 8083;
         }
         new MessageDiscardServer(port).run();
     }
